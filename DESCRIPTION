@@ -1,0 +1,17 @@
+Package: ESPRESSO.LD
+Type: Package
+Title: Power Analysis and Sample Size Calculation for two SNPs in Linkage
+    Disequilibrium
+Version: 1.0
+Date: 2013-04-01
+Author: Amadou Gaye
+Maintainer: Amadou Gaye <amadou.gaye@bristol.ac.uk>
+Description: The package allows for the Estimation of Sample-size and Power by
+    Exploring Simulated Study Outcomes for two genetic variants (SNPs) in
+    Linkage Disequilibrium. It supports simulation-based power calculation for
+    stand-alone case-control studies and for case-control analyses nested in
+    cohort studies, that take account of realistic assessment error.
+Depends:
+    MASS
+License: GPL-3
+LazyLoad: yes
