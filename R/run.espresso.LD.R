@@ -22,8 +22,8 @@
 #' # hold parameters for 4 scenarios:
 #' # scenario 1: a binary outcome determined by two binary SNPs in LD
 #' # scenario 2: a binary outcome determined by two additive SNPs in LD
-#' # scenario 3: a quantitative outcome determined by two binary SNPs not in LD
-#' # scenario 4: a quantitative outcome determined by two additive SNPs not in LD 
+#' # scenario 3: a quantitative outcome determined by two binary SNPs in LD
+#' # scenario 4: a quantitative outcome determined by two additive SNPs in LD 
 #' data(simulation.params) 
 #' data(pheno.params)
 #' data(geno1.params)
@@ -114,7 +114,6 @@ for(j in c(scenarios2run))
    numcases <- s.parameters$numcases[j]               
    numcontrols <- s.parameters$numcontrols[j]  
    numsubjects <- s.parameters$numsubjects[j]
-   LD <- s.parameters$LD[j]
    r.target <- s.parameters$r.target[j]            
    baseline.OR <- s.parameters$RR.5.95[j]                
    pval <- s.parameters$p.val[j]                      
@@ -170,21 +169,20 @@ for(j in c(scenarios2run))
                                     max.sample.size=allowed.sample.size, pheno.prev=disease.prev,
                                     freq1=MAF1, g1.model=geno1.model, g1.OR=geno1.OR, 
                                     freq2=MAF2, g2.model=geno2.model, g2.OR=geno2.OR, 
-                                    ld=LD, r=r.target, b.OR=baseline.OR, ph.error=pheno.error)
+                                    r=r.target, b.OR=baseline.OR, ph.error=pheno.error)
       }else{ # UNDER QUANTITATIVE OUTCOME MODEL
         # GENERATE THE SPECIFIED NUMBER OF SUBJECTS
         sim.data <- sim.QTL.data.LD(n=numsubjects,ph.mean=pheno.mean,ph.sd=pheno.sd,freq1=MAF1,
                                       g1.model=geno1.model,g1.efkt=geno1.efkt,freq2=MAF2,
-                                      g2.model=geno2.model,g2.efkt=geno2.efkt,ld=LD, r=r.target,
+                                      g2.model=geno2.model,g2.efkt=geno2.efkt,r=r.target,
                                       pheno.rel=pheno.reliability)
       }
       true.data <- sim.data$data
       
-      if(LD == 1){
-        estimated.rs[s] <- sim.data$estimated.r.value
-        estimated.Ds[s] <- sim.data$estimated.r.value
-        estimated.Dprimes[s] <- sim.data$estimated.r.value
-      }       
+      estimated.rs[s] <- sim.data$estimated.r.value
+      estimated.Ds[s] <- sim.data$estimated.r.value
+      estimated.Dprimes[s] <- sim.data$estimated.r.value
+  
 
       #------------SIMULATE ERRORS AND ADD THEM TO THE TRUE COVARIATES DATA TO OBTAIN OBSERVED COVARIATES DATA-----------#
 
@@ -238,9 +236,9 @@ for(j in c(scenarios2run))
 
    #------------------MAKE FINAL A TABLE THAT HOLDS BOTH INPUT PARAMETERS AND OUTPUT RESULTS---------------#
    mean.beta <- c(geno1.mean.beta, geno2.mean.beta)
-   if(LD == 0){estimated.r <- NA}else{estimated.r <- round(mean(estimated.rs, na.rm=TRUE),2)}
-   if(LD == 0){estimated.D <- NA}else{estimated.D <- round(mean(estimated.Ds, na.rm=TRUE),2)}
-   if(LD == 0){estimated.Dprime <- NA}else{estimated.Dprime <- round(mean(estimated.Dprimes, na.rm=TRUE),2)}
+   estimated.r <- round(mean(estimated.rs, na.rm=TRUE),2)
+   estimated.D <- round(mean(estimated.Ds, na.rm=TRUE),2)
+   estimated.Dprime <- round(mean(estimated.Dprimes, na.rm=TRUE),2)
    estimatedLDcoeffs <- c(estimated.r, estimated.D, estimated.Dprime)
    
    critical.res <- get.critical.results.LD(j,pheno.model,geno1.model,geno2.model,sample.sizes.required,power,mean.beta,estimatedLDcoeffs)
@@ -259,10 +257,9 @@ for(j in c(scenarios2run))
    }
    
    inparams <- s.parameters[j,]
-   if(LD==0){ s.parameters[,8] <- 'NA'}
    if(pheno.model==0){
       mod <- "binary"
-      inparams [c(6,14,15,18,22,28)] <- "NA"
+      inparams [c(6,13,14,17,21,27)] <- "NA"
       inputs <- inparams
       outputs <- c(excess, critical.res[[3]], critical.res[[4]], "NA", critical.res[[5]], 
                    critical.res[[6]], critical.res[[7]], critical.res[[8]], critical.res[[9]],
@@ -270,7 +267,7 @@ for(j in c(scenarios2run))
                    critical.res[[13]], critical.res[[14]])
    }else{
       mod <- "quantitative"
-      inparams [c(4,5,9,13,23,24,29,30)] <- "NA"
+      inparams [c(4,5,8,12,22,23,28,29)] <- "NA"
       inputs <- inparams
       outputs <- c("NA", "NA", "NA", critical.res[[3]], critical.res[[4]], critical.res[[5]], 
                    critical.res[[6]], critical.res[[7]], "NA", "NA", critical.res[[8]], 

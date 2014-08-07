@@ -5,7 +5,7 @@
 sim.CC.data.LD(n = NULL, ncases = NULL, ncontrols = NULL,
   max.sample.size = NULL, pheno.prev = NULL, freq1 = NULL,
   g1.model = NULL, g1.OR = NULL, freq2 = NULL, g2.model = NULL,
-  g2.OR = NULL, ld = NULL, r = NULL, b.OR = NULL, ph.error = NULL)
+  g2.OR = NULL, r = NULL, b.OR = NULL, ph.error = NULL)
 }
 \arguments{
   \item{n}{Number of observations to generate per
@@ -35,9 +35,6 @@ sim.CC.data.LD(n = NULL, ncases = NULL, ncontrols = NULL,
   determinant; 0 for binary and 1 for additive}
 
   \item{g2.OR}{Odds ratios of the 2st genetic determinant}
-
-  \item{LD}{Sets independence or LD between the two SNPs: 0
-  for independence and 1 for LD}
 
   \item{r}{desired level of correlation if the two SNPs are
   modelled as being in LD.}

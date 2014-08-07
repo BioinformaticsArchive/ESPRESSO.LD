@@ -13,8 +13,7 @@
     \item{\code{numcases}}{Number of cases under binary outcome}
     \item{\code{numcontrols}}{Number of controls under binary outcome}
     \item{\code{numsubjects}}{Number of subjects under continuous outcome}
-    \item{\code{LD}}{Sets independence or LD between the two SNPs: 0 for independence and 1 for LD}
-    \item{\code{r.target}}{Pearson coefficient of correlation; desired level of LD if the two SNPs are modelled as being in LD. 
+    \item{\code{r.target}}{Pearson coefficient of correlation for the desired level of LD. 
     The value of this parameter is ignored if the parameter 'LD' is set to its default value 0 (i.e. independence)}
     \item{\code{RR.5.95}}{The baseline odds ratio for subjects on 95 percent population centile versus 5 percentile. This parameter reflects the heterogeneity in disease risk arising from determinants that have not been measured or have not been included in the model. If this parameter is set to 10, the implication is that a high risk subject (someone at the upper 95 percent centile of population risk) is, all else being equal, at 10 times the odds of developing disease compared to someone else who is at low risk (individual at the lower 5 percent centile of population risk)}
     \item{\code{p.val}}{Cut-off p-value defining statistical significance}

@@ -13,8 +13,7 @@
 #' @param freq2 Minor allele frequency of the 2st genetic determinant
 #' @param g2.model Genetic model of the 2st genetic determinant; 0 for binary and 1 for additive
 #' @param g2.OR Odds ratios of the 2st genetic determinant
-#' @param LD Sets independence or LD between the two SNPs: 0 for independence and 1 for LD
-#' @param r desired level of correlation if the two SNPs are modelled as being in LD.
+#' @param r Pearson coefficient of correlation for the desired level of LD
 #' @param b.OR Baseline odds ratio for subject on 95 percent population 
 #' centile versus 5 percentile. This parameter reflects the heterogeneity in disease 
 #' risk arising from determinates that have not been measured or have not been 
@@ -27,7 +26,7 @@
 sim.CC.data.LD <-
 function(n=NULL, ncases=NULL, ncontrols=NULL, max.sample.size=NULL, pheno.prev=NULL,
 freq1=NULL, g1.model=NULL, g1.OR=NULL, freq2=NULL, g2.model=NULL, g2.OR=NULL, 
-ld=NULL, r=NULL, b.OR=NULL, ph.error=NULL)
+r=NULL, b.OR=NULL, ph.error=NULL)
 {
    # SET UP ZEROED COUNT VECTORS TO DETERMINE WHEN ENOUGH CASES AND CONTROLS HAVE BEEN GENERATED
    complete <- 0
@@ -43,57 +42,36 @@ ld=NULL, r=NULL, b.OR=NULL, ph.error=NULL)
    numloops <- 0
    
    # vector to store the empirical r values
-   if(ld == 1){
-     estimated.rs <- c()
-     estimated.Ds <- c()
-     estimated.Dprimes <- c()
-   }else{
-     estimated.rs <- NA
-     estimated.Ds <- NA
-     estimated.Dprimes <- NA
-   }
+    estimated.rs <- c()
+    estimated.Ds <- c()
+    estimated.Dprimes <- c()
      
    # LOOP UNTIL THE SET NUMBER OF CASES AND OR CONTROLS IS ACHIEVED OR THE 
    # THE SET POPULATION SIZE TO SAMPLE FROM IS REACHED
    while(complete==0 && complete.absolute==0)
      {
-       # if the two SNPs are to be modelled as in LD
-       if(ld == 1){
-         # the covariance matrix required to generate 2 variants with 
-         # the desired ld
-         cor.mat <- matrix(c(1,r,r,1),2,2) # cor. matrix
-         cov.mat.req <- make.cov.mat(cor.mat, c(1-freq1, 1-freq2))
+       # the covariance matrix required to generate 2 variants with 
+       # the desired ld
+       cor.mat <- matrix(c(1,r,r,1),2,2) # cor. matrix
+       cov.mat.req <- make.cov.mat(cor.mat, c(1-freq1, 1-freq2))
          
-         # if the required covariance matrix is not positive-definite get 
-         # the nearest positive-definite matrix (tolerance = 1e-06)
-         if(!is.posdef(cov.mat.req, 0.000001)){
-           cov.mat.req <- make.posdef(cov.mat.req, 0.000001)
-         }
-         # GENERATE THE TRUE GENOTYPE DATA FOR THE 1st and 2nd DETERMINANT 
-         out <- sim.LDgeno.data(n, c(freq1,freq2), c(g1.model,g2.model), r, cov.mat.req)
-         estimated.rs <- append(estimated.rs, out$estimated.r)
-         estimated.Ds <- append(estimated.Ds, out$estimated.D)
-         estimated.Dprimes <- append(estimated.Dprimes, out$estimated.Dprime)
-         LDgeno.data <- out$data
-         allele.A1 <- LDgeno.data$allele.A1
-         allele.B1 <- LDgeno.data$allele.B1
-         allele.A2 <- LDgeno.data$allele.A2
-         allele.B2 <- LDgeno.data$allele.B2
-         geno1 <- LDgeno.data$geno1.U
-         geno2 <- LDgeno.data$geno2.U
-       }else{
-         # GENERATE THE TRUE GENOTYPE DATA FOR THE 1ST DETERMINANT
-         geno1.data <- sim.geno.data(num.obs=n, geno.model=g1.model, MAF=freq1)
-         allele.A1 <- geno1.data$allele.A
-         allele.B1 <- geno1.data$allele.B
-         geno1 <- geno1.data$genotype
-         
-         # GENERATE THE TRUE GENOTYPE DATA FOR THE 2ST DETERMINANT
-         geno2.data <- sim.geno.data(num.obs=n, geno.model=g2.model, MAF=freq2)
-         allele.A2 <- geno2.data$allele.A
-         allele.B2 <- geno2.data$allele.B
-         geno2 <- geno2.data$genotype
+       # if the required covariance matrix is not positive-definite get 
+       # the nearest positive-definite matrix (tolerance = 1e-06)
+       if(!is.posdef(cov.mat.req, 0.000001)){
+         cov.mat.req <- make.posdef(cov.mat.req, 0.000001)
        }
+       # GENERATE THE TRUE GENOTYPE DATA FOR THE 1st and 2nd DETERMINANT 
+       out <- sim.LDgeno.data(n, c(freq1,freq2), c(g1.model,g2.model), r, cov.mat.req)
+       estimated.rs <- append(estimated.rs, out$estimated.r)
+       estimated.Ds <- append(estimated.Ds, out$estimated.D)
+       estimated.Dprimes <- append(estimated.Dprimes, out$estimated.Dprime)
+       LDgeno.data <- out$data
+       allele.A1 <- LDgeno.data$allele.A1
+       allele.B1 <- LDgeno.data$allele.B1
+       allele.A2 <- LDgeno.data$allele.A2
+       allele.B2 <- LDgeno.data$allele.B2
+       geno1 <- LDgeno.data$geno1.U
+       geno2 <- LDgeno.data$geno2.U
 
        # GENERATE SUBJECT EFFECT DATA THAT REFLECTS BASELINE RISK: 
        # NORMALLY DISTRIBUTED RANDOM EFFECT VECTOR WITH APPROPRIATE 

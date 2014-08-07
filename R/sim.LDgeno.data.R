@@ -5,7 +5,7 @@
 #' @param num.obs Number of observations to simulate
 #' @param MAF Minor allele frequencies of the two variants
 #' @param is.add Models of the two variants
-#' @param r.target Pearson coefficient of correlation for desired level of LD
+#' @param r.target Pearson coefficient of correlation for the desired level of LD
 #' @param cov.mat.req Covariance matrix required required to achieved the desired LD
 #' @return A dataframe that holds the genotypes and allelesdata of the two SNPs
 #' @keywords internal

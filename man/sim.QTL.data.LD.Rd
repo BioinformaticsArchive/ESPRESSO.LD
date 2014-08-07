@@ -29,9 +29,6 @@ sim.QTL.data.LD(n = NULL, ph.mean = NULL, ph.sd = NULL, freq1 = NULL,
 
   \item{g2.efkt}{Effects of the 2nd genetic variant}
 
-  \item{LD}{Sets independence or LD between the two SNPs: 0
-  for independence and 1 for LD}
-
   \item{r}{desired level of correlation if the two SNPs are
   modelled as being in LD.}
 

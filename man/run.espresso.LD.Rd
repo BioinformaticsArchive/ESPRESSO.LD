@@ -40,8 +40,8 @@ that modelled as being in LD
 # hold parameters for 4 scenarios:
 # scenario 1: a binary outcome determined by two binary SNPs in LD
 # scenario 2: a binary outcome determined by two additive SNPs in LD
-# scenario 3: a quantitative outcome determined by two binary SNPs not in LD
-# scenario 4: a quantitative outcome determined by two additive SNPs not in LD
+# scenario 3: a quantitative outcome determined by two binary SNPs in LD
+# scenario 4: a quantitative outcome determined by two additive SNPs in LD
 data(simulation.params)
 data(pheno.params)
 data(geno1.params)
